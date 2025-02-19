@@ -1,3 +1,7 @@
+![astroheimy](https://github.com/user-attachments/assets/dfc20d39-2a5f-411f-96e0-98ea3df9a0e2)
+
+
+
 # Heimy HashLips Doge Edition My Tweaks To Hashlips For The Doge Blockchain 🔥
 
 ## 🚀 Getting Started
