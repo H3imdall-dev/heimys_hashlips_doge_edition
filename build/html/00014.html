@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eyes #14</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #000; 
+    }
+    #container {
+      position: relative;
+      width: 100vw; 
+      height: 100vw; 
+      max-width: 1000px; 
+      max-height: 1000px;
+    }
+    img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: contain; 
+      pointer-events: none; 
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <img id="Black" class="Background" style="z-index:10;" src="/content/InscriptionID">
+    <img id="White" class="Eyeball" style="z-index:20;" src="/content/InscriptionID">
+    <img id="Pink" class="Eye color" style="z-index:30;" src="/content/InscriptionID">
+    <img id="Small" class="Iris" style="z-index:40;" src="/content/InscriptionID">
+    <img id="Shapes" class="Shine" style="z-index:50;" src="/content/InscriptionID">
+    <img id="Low" class="Bottom lid" style="z-index:60;" src="/content/InscriptionID">
+    <img id="Low" class="Top lid" style="z-index:70;" src="/content/InscriptionID">
+  </div>
+</body>
+</html>

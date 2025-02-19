@@ -1,0 +1,102 @@
+[
+  {
+    "filename": "00001",
+    "layername": "Black",
+    "inscriptionId": "InscriptionID"
+  },
+  {
+    "filename": "00002",
+    "layername": "High",
+    "inscriptionId": "InscriptionID"
+  },
+  {
+    "filename": "00003",
+    "layername": "Low",
+    "inscriptionId": "InscriptionID"
+  },
+  {
+    "filename": "00004",
+    "layername": "Middle",
+    "inscriptionId": "InscriptionID"
+  },
+  {
+    "filename": "00005",
+    "layername": "Cyan",
+    "inscriptionId": "InscriptionID"
+  },
+  {
+    "filename": "00006",
+    "layername": "Green",
+    "inscriptionId": "InscriptionID"
+  },
+  {
+    "filename": "00007",
+    "layername": "Pink",
+    "inscriptionId": "InscriptionID"
+  },
+  {
+    "filename": "00008",
+    "layername": "Purple",
+    "inscriptionId": "InscriptionID"
+  },
+  {
+    "filename": "00009",
+    "layername": "Red",
+    "inscriptionId": "InscriptionID"
+  },
+  {
+    "filename": "00010",
+    "layername": "Yellow",
+    "inscriptionId": "InscriptionID"
+  },
+  {
+    "filename": "00011",
+    "layername": "Red",
+    "inscriptionId": "InscriptionID"
+  },
+  {
+    "filename": "00012",
+    "layername": "White",
+    "inscriptionId": "InscriptionID"
+  },
+  {
+    "filename": "00013",
+    "layername": "Green",
+    "inscriptionId": "InscriptionID"
+  },
+  {
+    "filename": "00014",
+    "layername": "Large",
+    "inscriptionId": "InscriptionID"
+  },
+  {
+    "filename": "00015",
+    "layername": "Medium",
+    "inscriptionId": "InscriptionID"
+  },
+  {
+    "filename": "00016",
+    "layername": "Small",
+    "inscriptionId": "InscriptionID"
+  },
+  {
+    "filename": "00017",
+    "layername": "Shapes",
+    "inscriptionId": "InscriptionID"
+  },
+  {
+    "filename": "00018",
+    "layername": "High",
+    "inscriptionId": "InscriptionID"
+  },
+  {
+    "filename": "00019",
+    "layername": "Low",
+    "inscriptionId": "InscriptionID"
+  },
+  {
+    "filename": "00020",
+    "layername": "Middle",
+    "inscriptionId": "InscriptionID"
+  }
+]
