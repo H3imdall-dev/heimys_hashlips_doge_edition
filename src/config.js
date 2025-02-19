@@ -4,7 +4,7 @@ const { NETWORK } = require(`${basePath}/constants/network.js`);
 
 const network = NETWORK.eth;
 
-// General metadata for Ethereum
+// Set collection name here - name prexi is the important one here nothing else 
 const namePrefix = "Eyes";
 const description = "Remember to replace this description";
 const baseUri = "ipfs://NewUriToReplace";
