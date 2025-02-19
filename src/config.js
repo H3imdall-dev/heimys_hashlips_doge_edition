@@ -5,7 +5,7 @@ const { NETWORK } = require(`${basePath}/constants/network.js`);
 const network = NETWORK.eth;
 
 // General metadata for Ethereum
-const namePrefix = "Your Collection";
+const namePrefix = "Eyes";
 const description = "Remember to replace this description";
 const baseUri = "ipfs://NewUriToReplace";
 
@@ -20,6 +20,10 @@ const solanaMetadata = {
     },
   ],
 };
+
+const convertFilenames = true; // Change to false if you don't want to convert filenames
+
+const recursion = true; // Set to false to disable HTML generation
 
 // If you have selected Solana then the collection starts from 0 automatically
 const layerConfigurations = [
@@ -37,13 +41,14 @@ const layerConfigurations = [
   },
 ];
 
+
 const shuffleLayerConfigurations = false;
 
 const debugLogs = false;
 
 const format = {
-  width: 512,
-  height: 512,
+  width: 1024,
+  height: 1024,
   smoothing: false,
 };
 
@@ -119,4 +124,6 @@ module.exports = {
   solanaMetadata,
   gif,
   preview_gif,
+  convertFilenames,
+  recursion,
 };
