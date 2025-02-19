@@ -14,13 +14,18 @@
 ### **2️⃣ Prepare Your Layers**
 - Place all layer images in the `layers/` directory.
 - Name the folders according to their layer type, e.g., `Background`, `Skin`, `Head`.
-- Ensure each trait inside each layer directory has a **rarity** out of 100:
+- Ensure each layer has a **rarity** out of 100:
   ```sh
   blue#20.png  # Blue background used in 20% of the collection.
   ```
-- Each folder's traits **must total 100%** to distribute traits correctly.
+- Each folder's layers **must total 100%** to distribute traits correctly.
 
 ### **3️⃣ Configure Your Collection**
+
+#### **🔹 Set Collection Name**
+```js
+const namePrefix = "Your name here";
+```
 Open `config.js` and edit:
 
 #### **🔹 Define Layer Order & Collection Size**
@@ -117,6 +122,7 @@ This time, your build will contain:
 📩 **For inscription assistance, contact me on X: [@heimdall_bull](https://twitter.com/heimdall_bull)**.
 
 🎉 **You're now ready to launch your recursive NFT collection!** 🚀
+
 
 ---
 ---
