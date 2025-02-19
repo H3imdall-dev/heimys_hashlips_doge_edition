@@ -21,6 +21,8 @@ const {
   network,
   solanaMetadata,
   gif,
+  convertFilenames,
+  recursion,
 } = require(`${basePath}/src/config.js`);
 const canvas = createCanvas(format.width, format.height);
 const ctx = canvas.getContext("2d");
@@ -86,6 +88,26 @@ const getElements = (path) => {
     });
 };
 
+const layerConfigPath = `${basePath}/src/layerconfig.json`;
+let layerMappings = {}; // Stores filename → layername mapping
+let layerNameToInscription = {}; // Stores layername → inscriptionId mapping
+
+if (fs.existsSync(layerConfigPath)) {
+  try {
+    const rawData = JSON.parse(fs.readFileSync(layerConfigPath, "utf-8"));
+    
+    rawData.forEach((item) => {
+      layerMappings[item.filename] = item.layername; // ✅ Match filename → layername
+      layerNameToInscription[item.layername] = item.inscriptionId; // ✅ Match layername → inscriptionId
+    });
+
+    console.log("✅ Layer config loaded successfully.");
+  } catch (error) {
+    console.error("❌ Error loading layerconfig.json:", error);
+  }
+}
+
+
 const layersSetup = (layersOrder) => {
   const layers = layersOrder.map((layerObj, index) => ({
     id: index,
@@ -111,8 +133,9 @@ const layersSetup = (layersOrder) => {
 };
 
 const saveImage = (_editionCount) => {
+  const paddedCount = _editionCount.toString().padStart(5, '0');
   fs.writeFileSync(
-    `${buildDir}/images/${_editionCount}.png`,
+    `${buildDir}/images/${paddedCount}.png`,
     canvas.toBuffer("image/png")
   );
 };
@@ -129,47 +152,37 @@ const drawBackground = () => {
 };
 
 const addMetadata = (_dna, _edition) => {
-  let dateTime = Date.now();
-  let tempMetadata = {
-    name: `${namePrefix} #${_edition}`,
-    description: description,
-    image: `${baseUri}/${_edition}.png`,
-    dna: sha1(_dna),
-    edition: _edition,
-    date: dateTime,
-    ...extraMetadata,
-    attributes: attributesList,
-    compiler: "HashLips Art Engine",
-  };
-  if (network == NETWORK.sol) {
-    tempMetadata = {
-      //Added metadata for solana
-      name: tempMetadata.name,
-      symbol: solanaMetadata.symbol,
-      description: tempMetadata.description,
-      //Added metadata for solana
-      seller_fee_basis_points: solanaMetadata.seller_fee_basis_points,
-      image: `${_edition}.png`,
-      //Added metadata for solana
-      external_url: solanaMetadata.external_url,
-      edition: _edition,
-      ...extraMetadata,
-      attributes: tempMetadata.attributes,
-      properties: {
-        files: [
-          {
-            uri: `${_edition}.png`,
-            type: "image/png",
-          },
-        ],
-        category: "image",
-        creators: solanaMetadata.creators,
-      },
+  let formattedAttributes = attributesList.map(attr => {
+    let attributeName = attr.value;
+
+    // ✅ Ensure filenames are converted to layer names
+    if (convertFilenames && layerMappings[attributeName]) {
+      attributeName = layerMappings[attributeName]; // ✅ Use only layer name
+    }
+
+    return {
+      layer: attr.trait_type,
+      value: attributeName,
     };
-  }
+  });
+
+  let tempMetadata = {
+    "inscriptionId": "", // Leave blank as requested
+    "name": `${namePrefix} #${_edition}`, 
+    "attributes": formattedAttributes.reduce((acc, attr) => {
+      acc[attr.layer] = attr.value; 
+      return acc;
+    }, {})
+  };
+
   metadataList.push(tempMetadata);
   attributesList = [];
 };
+
+
+
+
+
 
 const addAttributes = (_element) => {
   let selectedElement = _element.layer.selectedElement;
@@ -303,22 +316,34 @@ const createDna = (_layers) => {
   return randNum.join(DNA_DELIMITER);
 };
 
-const writeMetaData = (_data) => {
-  fs.writeFileSync(`${buildDir}/json/_metadata.json`, _data);
+const writeMetaData = () => {
+  const metadataFilePath = `${buildDir}/json/DM.json`;
+  const owMetadataFilePath = `${buildDir}/json/OW.json`;
+
+  // ✅ Save DM.json (Existing Format)
+  fs.writeFileSync(metadataFilePath, JSON.stringify(metadataList, null, 2));
+  console.log(`✅ Saved: ${metadataFilePath}`);
+
+  // ✅ Generate OW.json (New Format) with an empty "id" field
+  let owMetadataList = metadataList.map((item) => ({
+    id: "", // ✅ Keep ID field empty
+    name: item.name, // ✅ Collection Name
+    attributes: Object.entries(item.attributes).map(([trait_type, value]) => ({
+      trait_type,
+      value,
+    })),
+  }));
+
+  fs.writeFileSync(owMetadataFilePath, JSON.stringify(owMetadataList, null, 2));
+  console.log(`✅ Saved: ${owMetadataFilePath}`);
+
+  // ✅ Trigger HTML generation if enabled
+  if (recursion) {
+    console.log("🚀 Generating HTML files...");
+    generateHtmlFiles();
+  }
 };
 
-const saveMetaDataSingleFile = (_editionCount) => {
-  let metadata = metadataList.find((meta) => meta.edition == _editionCount);
-  debugLogs
-    ? console.log(
-        `Writing metadata for ${_editionCount}: ${JSON.stringify(metadata)}`
-      )
-    : null;
-  fs.writeFileSync(
-    `${buildDir}/json/${_editionCount}.json`,
-    JSON.stringify(metadata, null, 2)
-  );
-};
 
 function shuffle(array) {
   let currentIndex = array.length,
@@ -339,6 +364,7 @@ const startCreating = async () => {
   let editionCount = 1;
   let failedCount = 0;
   let abstractedIndexes = [];
+
   for (
     let i = network == NETWORK.sol ? 0 : 1;
     i <= layerConfigurations[layerConfigurations.length - 1].growEditionSizeTo;
@@ -349,13 +375,16 @@ const startCreating = async () => {
   if (shuffleLayerConfigurations) {
     abstractedIndexes = shuffle(abstractedIndexes);
   }
+
   debugLogs
     ? console.log("Editions left to create: ", abstractedIndexes)
     : null;
+
   while (layerConfigIndex < layerConfigurations.length) {
     const layers = layersSetup(
       layerConfigurations[layerConfigIndex].layersOrder
     );
+
     while (
       editionCount <= layerConfigurations[layerConfigIndex].growEditionSizeTo
     ) {
@@ -403,7 +432,7 @@ const startCreating = async () => {
             : null;
           saveImage(abstractedIndexes[0]);
           addMetadata(newDna, abstractedIndexes[0]);
-          saveMetaDataSingleFile(abstractedIndexes[0]);
+
           console.log(
             `Created edition: ${abstractedIndexes[0]}, with DNA: ${sha1(
               newDna
@@ -426,7 +455,88 @@ const startCreating = async () => {
     }
     layerConfigIndex++;
   }
-  writeMetaData(JSON.stringify(metadataList, null, 2));
+
+  // ✅ Ensure all metadata is saved once at the end
+  writeMetaData();
+};
+
+const generateHtmlFiles = () => {
+  const metadataFilePath = `${buildDir}/json/DM.json`;
+  if (!fs.existsSync(metadataFilePath)) {
+    console.log("⚠️ No DM.json found. Skipping HTML generation.");
+    return;
+  }
+
+  const metadataList = JSON.parse(fs.readFileSync(metadataFilePath, "utf-8"));
+  const htmlDir = `${buildDir}/html`;
+  if (!fs.existsSync(htmlDir)) fs.mkdirSync(htmlDir);
+
+  metadataList.forEach((metadata) => {
+    const nftName = metadata.name;
+    const editionNumber = metadata.name.split("#").pop().trim();
+    const attributes = metadata.attributes;
+
+    let htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${nftName}</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #000; 
+    }
+    #container {
+      position: relative;
+      width: 100vw; 
+      height: 100vw; 
+      max-width: 1000px; 
+      max-height: 1000px;
+    }
+    img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: contain; 
+      pointer-events: none; 
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+`;
+
+    let zIndex = 10;
+
+    // ✅ Ensure correct mapping of layers to inscription IDs
+    Object.entries(attributes).forEach(([layerCategory, traitName]) => {
+      if (traitName !== "Nothing" && layerNameToInscription[traitName]) {
+        let inscriptionId = layerNameToInscription[traitName];
+
+        htmlContent += `    <img id="${traitName}" class="${layerCategory}" style="z-index:${zIndex};" src="/content/${inscriptionId}">\n`;
+        zIndex += 10;
+      }
+    });
+
+    htmlContent += `  </div>
+</body>
+</html>`;
+
+    const paddedEdition = editionNumber.padStart(5, "0");
+    const filePath = `${htmlDir}/${paddedEdition}.html`;
+
+    fs.writeFileSync(filePath, htmlContent);
+    console.log(`✅ Saved: ${filePath}`);
+  });
+
+  console.log("✅ All HTML files generated successfully.");
 };
 
 module.exports = { startCreating, buildSetup, getElements };
