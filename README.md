@@ -14,11 +14,11 @@
 ### **2️⃣ Prepare Your Layers**
 - Place all layer images in the `layers/` directory.
 - Name the folders according to their layer type, e.g., `Background`, `Skin`, `Head`.
-- Ensure each layer has a **rarity** out of 100:
+- Ensure each trait inside each layer directory has a **rarity** out of 100:
   ```sh
   blue#20.png  # Blue background used in 20% of the collection.
   ```
-- Each folder's layers **must total 100%** to distribute traits correctly.
+- Each folder's traits **must total 100%** to distribute traits correctly.
 
 ### **3️⃣ Configure Your Collection**
 Open `config.js` and edit:
