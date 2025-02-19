@@ -1,34 +1,135 @@
-# Welcome to HashLips 👄
+# Heimy HashLips Doge Edition My Tweaks To Hashlips For The Doge Blockchain 🔥
 
-![](https://github.com/HashLips/hashlips_art_engine/blob/main/logo.png)
+## 🚀 Getting Started
 
-All the code in these repos was created and explained by HashLips on the main YouTube channel.
+### **1️⃣ Download & Install**
+1. Clone the repository or download the folder.
+2. Ensure **Node.js** is installed.
+3. Open the folder in **VS Code** or **Terminal**.
+4. Run:
+   ```sh
+   npm install
+   ```
 
-To find out more please visit:
+### **2️⃣ Prepare Your Layers**
+- Place all layer images in the `layers/` directory.
+- Name the folders according to their layer type, e.g., `Background`, `Skin`, `Head`.
+- Ensure each layer has a **rarity** out of 100:
+  ```sh
+  blue#20.png  # Blue background used in 20% of the collection.
+  ```
+- Each folder's layers **must total 100%** to distribute traits correctly.
 
-[📺 YouTube](https://www.youtube.com/channel/UC1LV4_VQGBJHTJjEWUmy8nA)
+### **3️⃣ Configure Your Collection**
+Open `config.js` and edit:
 
-[👄 Discord](https://discord.com/invite/qh6MWhMJDN)
+#### **🔹 Define Layer Order & Collection Size**
+```js
+const layerConfigurations = [
+  {
+    growEditionSizeTo: 50,  // Set collection size
+    layersOrder: [
+      { name: "Background" },
+      { name: "Body" },
+      { name: "Skin" },
+      { name: "Head" }
+    ]
+  }
+];
+```
 
-[💬 Telegram](https://t.me/hashlipsnft)
+#### **🔹 Set Image Dimensions**
+```js
+const format = {
+  width: 400,  // Match layer resolution
+  height: 400,
+  smoothing: false,
+};
+```
 
-[🐦 Twitter](https://twitter.com/hashlipsnft)
+#### **🔹 Standard Generation Settings**
+```js
+const convertFilenames = false;
+const recursion = false;
+```
 
-[ℹ️ Website](https://hashlips.online/HashLips)
+### **4️⃣ Generate the Collection**
+Run the command:
+```sh
+npm run build
+```
+Your **generated collection** will be in the `build/` folder:
+- **Images** → `/build/images`
+- **Metadata** → `/build/json` (for marketplaces: Doggy Market & Ordinals Wallet)
 
-# HashLips Art Engine 🔥
+### **5️⃣ Inscribing Your Collection**
+Once images are generated, **inscribe them** on-chain.
+📩 **DM me on X: [@heimdall_bull](https://twitter.com/heimdall_bull)** for inscription services.
+After inscribing, update the metadata with **inscription IDs** before listing.
 
-![](https://github.com/HashLips/hashlips_art_engine/blob/main/banner.png)
+---
+
+## 🌀 Creating a Recursive Collection
+
+### **1️⃣ Inscribe Your Layers**
+- **Each layer must be inscribed individually**.
+- They will be named numerically (`00001.png`, `00002.png`, etc.).
+- Add all numbered assets to respective layer folders.
+
+### **2️⃣ Create `layerconfig.json`**
+This file **maps filenames to trait names and inscription IDs**:
+```json
+[
+  { "filename": "00001", "layername": "Blue", "inscriptionId": "INSCRIPTION_ID" },
+  { "filename": "00002", "layername": "Green", "inscriptionId": "INSCRIPTION_ID" },
+  { "filename": "00003", "layername": "Yellow", "inscriptionId": "INSCRIPTION_ID" }
+]
+```
+**Ensure:**
+- All assets are correctly mapped.
+- No **conflicts or overlapping traits**.
+
+### **3️⃣ Enable Recursive Mode**
+Update `config.js`:
+```js
+const convertFilenames = true;
+const recursion = true;
+```
+Save the file.
+
+### **4️⃣ Generate the Recursive Collection**
+Run:
+```sh
+npm run build
+```
+This time, your build will contain:
+- **Images** → `/build/images` (for marketing & previewing).
+- **HTML Files** → `/build/html` (ready for inscription).
+- **Metadata** → `/build/json/`
+  - `DM.json` → For **Doggy Market**.
+  - `OW.json` → For **Ordinals Wallet**.
+
+### **5️⃣ Final Step: Inscribe & Submit Metadata**
+1. **Inscribe all generated HTML files**.
+2. **Update `DM.json` & `OW.json`** with the **inscription IDs**.
+3. **Submit the metadata to the relevant marketplaces**.
+
+📩 **For inscription assistance, contact me on X: [@heimdall_bull](https://twitter.com/heimdall_bull)**.
+
+---
+
+🎉 **You're now ready to launch your recursive NFT collection!** 🚀
+
+
+
+full hashlips instructions below for all features
+
 
 Create generative art by using the canvas api and node js. Before you use the generation engine, make sure you have node.js(v10.18.0) installed.
 
 ## Installation 🛠️
 
-If you are cloning the project then run this first, otherwise you can download the source code on the release page and skip this step.
-
-```sh
-git clone https://github.com/HashLips/hashlips_art_engine.git
-```
+Download this Github - open it in vs code or in the command line 
 
 Go to the root of your folder and run this command if you have yarn installed.
 
@@ -44,9 +145,13 @@ npm install
 
 ## Usage ℹ️
 
-Create your different layers as folders in the 'layers' directory, and add all the layer assets in these directories. You can name the assets anything as long as it has a rarity weight attached in the file name like so: `example element#70.png`. You can optionally change the delimiter `#` to anything you would like to use in the variable `rarityDelimiter` in the `src/config.js` file.
+Create your different layers as folders in the 'layers' directory, and add all the layer assets in these directories. 
+You can name the assets anything as long as it has a rarity weight attached in the file name like so: `example element#70.png`. 
+You can optionally change the delimiter `#` to anything you would like to use in the variable `rarityDelimiter` in the `src/config.js` file.
 
-Once you have all your layers, go into `src/config.js` and update the `layerConfigurations` objects `layersOrder` array to be your layer folders name in order of the back layer to the front layer.
+Once you have all your layers, 
+
+go into `src/config.js` and update the `layerConfigurations` objects `layersOrder` array to be your layer folders name in order of the back layer to the front layer.
 
 _Example:_ If you were creating a portrait design, you might have a background, then a head, a mouth, eyes, eyewear, and then headwear, so your `layersOrder` would look something like this:
 
@@ -55,6 +160,7 @@ const layerConfigurations = [
   {
     growEditionSizeTo: 100,
     layersOrder: [
+      { name: "Background" },
       { name: "Head" },
       { name: "Mouth" },
       { name: "Eyes" },
@@ -229,15 +335,6 @@ const extraMetadata = {};
 
 That's it, you're done.
 
-## Utils
-
-### Updating baseUri for IPFS and description
-
-You might possibly want to update the baseUri and description after you have ran your collection. To update the baseUri and description simply run:
-
-```sh
-npm run update_info
-```
 
 ### Generate a preview image
 
