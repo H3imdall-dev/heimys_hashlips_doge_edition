@@ -116,11 +116,10 @@ This time, your build will contain:
 
 📩 **For inscription assistance, contact me on X: [@heimdall_bull](https://twitter.com/heimdall_bull)**.
 
----
-
 🎉 **You're now ready to launch your recursive NFT collection!** 🚀
 
-
+---
+---
 
 full hashlips instructions below for all features
 
