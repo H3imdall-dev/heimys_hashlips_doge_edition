@@ -4,7 +4,7 @@
 
 ### **1️⃣ Download & Install**
 1. Clone the repository or download the folder.
-2. Ensure **Node.js(v14.17.3)** is installed. (you will need node version manager installed as this works on an older version of node)
+2. Ensure **Node.js(v14.17.3)** is installed. (you will need to install only this version of node.js or node version manager installed so you can have multiple versions installed)
 3. Open the folder in **VS Code** or **Terminal**.
 4. Run:
    ```sh
