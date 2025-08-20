@@ -73,7 +73,7 @@ Your **generated collection** will be in the `build/` folder:
 
 ### **5️⃣ Inscribing Your Collection**
 Once images are generated, **inscribe them** on-chain.
-📩 **DM me on X: [@heimdall_bull](https://twitter.com/heimdall_bull)** for inscription services.
+📩 **: (https://inscribe.doginals.org)** for inscription services.
 After inscribing, update the metadata with **inscription IDs** before listing.
 
 ---
